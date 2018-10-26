@@ -156,13 +156,13 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 100
-    m_Alignment: 4
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: GAME
+  m_Text: GAMEGAMEGAMEGAMEGAMEGAMEGAMEGAMEGAMEGAMEGAMEGAMEGAMEGAMEGAMEGAME
 --- !u!222 &192914793
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -182,11 +182,11 @@ RectTransform:
   m_Father: {fileID: 1868361804}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 200}
-  m_Pivot: {x: 0.5, y: 0}
+  m_SizeDelta: {x: 900, y: 0}
+  m_Pivot: {x: 1, y: 0.5}
 --- !u!1 &337894284
 GameObject:
   m_ObjectHideFlags: 0
@@ -232,7 +232,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 0235538e44c6a254489a6d2244bbe23a, type: 2}
+  - {fileID: 2100000, guid: f1ea18588e6930047824384178857594, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -281,9 +281,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 401828546}
+  - component: {fileID: 401828549}
   - component: {fileID: 401828545}
   - component: {fileID: 401828547}
-  - component: {fileID: 401828549}
   - component: {fileID: 401828548}
   m_Layer: 0
   m_Name: GameManager
@@ -300,9 +300,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 401828544}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e4b3ad967008a146a252b99d805cdd5, type: 3}
+  m_Script: {fileID: 11500000, guid: 0eca57c815278c54daf51fb6b2832477, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  text: {fileID: 0}
+  dataPath: 
+  audioSource: {fileID: 0}
 --- !u!4 &401828546
 Transform:
   m_ObjectHideFlags: 0
@@ -324,11 +327,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 401828544}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4bdfafcfa99ea69408e19758f53a8b4d, type: 3}
+  m_Script: {fileID: 11500000, guid: c673f2de3f2722e499a1c1a5431d2dc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dataPath: 
   pathText: {fileID: 1389009936}
+  text2: {fileID: 192914792}
 --- !u!82 &401828548
 AudioSource:
   m_ObjectHideFlags: 0
@@ -417,12 +421,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 401828544}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 597fdf3a93a59b845a7e1dc49a992e40, type: 3}
+  m_Script: {fileID: 11500000, guid: 3a23867eec34e214b89860cd0d07d4e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: {fileID: 192914792}
-  dataPath: 
-  audioSource: {fileID: 0}
 --- !u!1 &989450394
 GameObject:
   m_ObjectHideFlags: 0
@@ -599,11 +600,11 @@ RectTransform:
   m_Father: {fileID: 1868361804}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 1080}
-  m_Pivot: {x: 0.5, y: 1}
+  m_SizeDelta: {x: 900, y: 0}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1389009936
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -630,11 +631,11 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 100
-    m_Alignment: 4
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: GAME
 --- !u!222 &1389009937

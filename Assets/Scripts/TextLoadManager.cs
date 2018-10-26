@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,11 +10,13 @@ public class TextLoadManager : MonoBehaviour
 
     public string dataPath;
     public Text pathText;
+    public Text text2;
 
     IEnumerator Start()
     {
-        dataPath = Application.persistentDataPath + "/songs/test.txt";
+        dataPath = "file://" + Application.persistentDataPath + "/songs/test.txt";
         pathText.text = dataPath;
+
         using (WWW www = new WWW(dataPath))
         {
             yield return www;
@@ -22,7 +26,6 @@ public class TextLoadManager : MonoBehaviour
 
     public void ParseText(string text)
     {
-        // pathText.text = text;
         string[] stringLine = text.Split('\n');
 
         var lineCount = stringLine.Length;
