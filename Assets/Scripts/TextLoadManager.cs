@@ -1,18 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TextLoadManager : MonoBehaviour
 {
 
     public string dataPath;
+    public Text pathText;
 
     IEnumerator Start()
     {
-        dataPath = Application.dataPath + "/test.txt";
-        Debug.Log(dataPath);
-
-
+        dataPath = Application.persistentDataPath + "/songs/test.txt";
+        pathText.text = dataPath;
         using (WWW www = new WWW(dataPath))
         {
             yield return www;
@@ -22,7 +22,7 @@ public class TextLoadManager : MonoBehaviour
 
     public void ParseText(string text)
     {
-        Debug.Log(text);
+        // pathText.text = text;
         string[] stringLine = text.Split('\n');
 
         var lineCount = stringLine.Length;
@@ -36,16 +36,26 @@ public class TextLoadManager : MonoBehaviour
             {
                 string[] splitLine = stringLine[lineNum].Split(' ');
                 Debug.Log("name : " + splitLine[1]);
+
+            }
+            else if (stringLine[lineNum].Contains("#SOUND"))
+            {
+                string[] splitLine = stringLine[lineNum].Split(' ');
+                Debug.Log("sound : " + splitLine[1]);
+                StartCoroutine(GetComponent<SoundLoadManager>().LoadSound(splitLine[1]));
+
             }
             else if (stringLine[lineNum].Contains("#BPM"))
             {
                 string[] splitLine = stringLine[lineNum].Split(' ');
                 Debug.Log("bpm : " + splitLine[1]);
+
             }
             else if (stringLine[lineNum].Contains("#PRESET"))
             {
                 string[] splitLine = stringLine[lineNum].Split(' ');
                 Debug.Log("preset : " + splitLine[1]);
+
             }
             else if (stringLine[lineNum].Contains("#DATA"))
             {
@@ -57,17 +67,31 @@ public class TextLoadManager : MonoBehaviour
                 Debug.Log("fin");
                 break;
             }
-            else if (stringLine[lineNum].Equals("-----"))
+            else if (stringLine[lineNum].Contains("-----"))
             {
-                Debug.Log("line");
-                // string noteLine1 = stringLine[lineNum + 1];
-                // string noteLine2 = stringLine[lineNum + 2];
-                // Debug.Log("measure" + mNum++);
-                // Debug.Log("line1 : " + noteLine1);
-                // Debug.Log("line2 : " + noteLine2);
+                string noteLine1 = stringLine[lineNum + 1].Trim();
+                string noteLine2 = stringLine[lineNum + 2].Trim();
+                Debug.Log("measure" + mNum++);
+                Debug.Log("line1 : " + noteLine1);
+                for (int i = 0; i < noteLine1.Length; i++)
+                {
+                    if (noteLine1[i] == '1' || noteLine1[i] == '2')
+                    {
+                        Debug.Log("note1 : " + (float)i / noteLine1.Length);
+                    }
+                }
+                Debug.Log("line2 : " + noteLine2);
+                for (int i = 0; i < noteLine2.Length; i++)
+                {
+                    if (noteLine2[i] == '1' || noteLine2[i] == '2')
+                    {
+                        Debug.Log("note2 : " + (float)i / noteLine2.Length);
+                    }
+                }
 
-                // lineNum++;
-                // lineNum++;
+
+                lineNum++;
+                lineNum++;
             }
 
 
