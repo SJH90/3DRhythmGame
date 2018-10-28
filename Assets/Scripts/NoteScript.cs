@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LineScript : MonoBehaviour
+public class NoteScript : MonoBehaviour
 {
     public AudioSource audio;
+    public GameManager manager;
     public float time;
+    public int line;
 
     // Use this for initialization
-    void Start()
+    void Awake()
     {
 
     }
@@ -16,10 +18,10 @@ public class LineScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector3(0, (time - audio.time) * 5, 0);
-        if (transform.position.y < 0)
+        transform.localPosition = new Vector3(0, (time - manager.accurTime) * 10, 0);
+        if (manager.accurTime > time + 0.5f)
         {
-            gameObject.SetActive(false);
+            Destroy(gameObject);
         }
     }
 }

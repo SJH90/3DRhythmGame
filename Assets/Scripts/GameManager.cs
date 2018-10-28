@@ -1,73 +1,257 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-
-    /*
-		텍스트 로드
-		음악 로드
-
-		텍스트 분석
-
-		preset
-		bpm
-		노트
-
-		1 일반노트
-		2 롱노트
-
-		sample.txt
-
-		#BPM 120
-		#PRESET 1000
-		-----
-		0
-		0
-		-----
-		11
-		0220
-		-----
-		
-	 */
-
-    public float bpm;
-    public float preset;
-    public GameObject beatLine;
+    public GameObject noteObject;
     public AudioSource audio;
-    public List<float> list;
+    public Music audioData;
 
-    // Use this for initialization
-    void Start()
+    public float startTime;
+    public float accurTime;
+
+    public Text judgeText;
+    public Transform laneObj1;
+    public Transform laneObj2;
+
+    public GameObject effect1;
+    public GameObject effect2;
+
+    public Material mGreat;
+    public Material mGood;
+    public Material mBad;
+
+
+    private string text = "";
+
+    public void getText(string text)
     {
-        audio = GetComponent<AudioSource>();
-        float time = (float)60 * 4 / 170;
-        preset = 0.3f;
-        list.Add(0 * time - preset);
-        list.Add(1 * time - preset);
-        list.Add(2 * time - preset);
-        list.Add(3 * time - preset);
-        list.Add(4 * time - preset);
-        list.Add(5 * time - preset);
-        list.Add(6 * time - preset);
-        list.Add(7 * time - preset);
-        list.Add(8 * time - preset);
-
-        for (int i = 0; i < list.Count; i++)
+        this.text = text;
+    }
+    // Use this for initialization
+    IEnumerator Start()
+    {
+        string fileName = "test.txt";
+        audioData = new Music();
+        StartCoroutine(GetComponent<LoadManager>().LoadText(fileName));
+        while ("".Equals(text))
         {
-            GameObject obj = Instantiate(beatLine);
-            obj.transform.parent = transform.parent;
-            obj.SetActive(true);
-            LineScript sc = obj.GetComponent<LineScript>();
-            sc.audio = audio;
-            sc.time = list[i];
+            yield return null;
         }
+        ParseText(text);
+        StartCoroutine(GetComponent<LoadManager>().LoadSound(audioData.FileName));
+        audio = GetComponent<AudioSource>();
+        while (audio.clip == null)
+        {
+            yield return null;
+        }
+
+        GameStart();
     }
 
+    void GameStart()
+    {
+        Common.Log("start game");
+
+        for (int i = 0; i < audioData.laneList1.Count; i++)
+        {
+            GameObject obj = Instantiate(noteObject);
+            obj.transform.parent = laneObj1;
+            obj.SetActive(true);
+            NoteScript sc = obj.GetComponent<NoteScript>();
+            sc.audio = audio;
+            sc.manager = this;
+            sc.time = audioData.laneList1[i];
+            sc.line = -1;
+        }
+
+        for (int i = 0; i < audioData.laneList2.Count; i++)
+        {
+            GameObject obj = Instantiate(noteObject);
+            obj.transform.parent = laneObj2;
+            obj.SetActive(true);
+            NoteScript sc = obj.GetComponent<NoteScript>();
+            sc.audio = audio;
+            sc.manager = this;
+            sc.time = audioData.laneList2[i];
+            sc.line = 1;
+        }
+
+        startTime = Time.time;
+        Common.Log("start music");
+        audio.Play();
+    }
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(audio.time);
+        accurTime = ((Time.time - startTime) + audio.time) / 2;
+        //Debug.Log(audio.time);
+    }
+
+    public void Button1()
+    {
+        if (laneObj1.childCount > 0)
+        {
+            Transform note = laneObj1.GetChild(0);
+            NoteScript ns = note.GetComponent<NoteScript>();
+            judgeText.text += String.Format("{0:F2} \n", ns.time - accurTime);
+            if (Mathf.Abs(ns.time - accurTime) < 0.1)
+            {
+                effect1.GetComponent<EffectScript>().Show(mGreat);
+                Common.Log("Great");
+                Destroy(note.gameObject);
+            }
+            else if (Mathf.Abs(ns.time - accurTime) < 0.2)
+            {
+                effect1.GetComponent<EffectScript>().Show(mGood);
+                Common.Log("Good");
+                Destroy(note.gameObject);
+            }
+            else if (Mathf.Abs(ns.time - accurTime) < 0.5)
+            {
+                effect1.GetComponent<EffectScript>().Show(mBad);
+                Common.Log("Bad");
+                Destroy(note.gameObject);
+            }
+        }
+    }
+    public void Button2()
+    {
+        if (laneObj2.childCount > 0)
+        {
+            Transform note = laneObj2.GetChild(0);
+            NoteScript ns = note.GetComponent<NoteScript>();
+            Material effectColor = null;
+            judgeText.text += String.Format("{0:F2} \n", ns.time - accurTime);
+            if (Mathf.Abs(ns.time - accurTime) < 0.1)
+            {
+                effectColor = mGreat;
+                Common.Log("Great");
+                Destroy(note.gameObject);
+            }
+            else if (Mathf.Abs(ns.time - accurTime) < 0.2)
+            {
+                effectColor = mGood;
+                Common.Log("Good");
+                Destroy(note.gameObject);
+            }
+            else if (Mathf.Abs(ns.time - accurTime) < 0.5)
+            {
+                effectColor = mBad;
+                Common.Log("Bad");
+                Destroy(note.gameObject);
+            }
+            effect2.GetComponent<EffectScript>().Show(effectColor);
+        }
+    }
+
+    public void ParseText(string text)
+    {
+        string[] stringLine = text.Split('\n');
+
+        var lineCount = stringLine.Length;
+        var lineNum = 0;
+        var mNum = 0;
+
+        while (lineNum < lineCount)
+        {
+
+            if (stringLine[lineNum].Contains("#NAME"))
+            {
+                string[] splitLine = stringLine[lineNum].Split(' ');
+                Common.Log("name : " + splitLine[1]);
+                audioData.Name = splitLine[1].Trim();
+            }
+            else if (stringLine[lineNum].Contains("#SOUND"))
+            {
+                string[] splitLine = stringLine[lineNum].Split(' ');
+                Common.Log("sound : " + splitLine[1]);
+                audioData.FileName = splitLine[1].Trim();
+            }
+            else if (stringLine[lineNum].Contains("#BPM"))
+            {
+                string[] splitLine = stringLine[lineNum].Split(' ');
+                Common.Log("bpm : " + splitLine[1]);
+                audioData.Bpm = float.Parse(splitLine[1].Trim());
+
+            }
+            else if (stringLine[lineNum].Contains("#PRESET"))
+            {
+                string[] splitLine = stringLine[lineNum].Split(' ');
+                Common.Log("preset : " + splitLine[1]);
+                audioData.Preset = float.Parse(splitLine[1].Trim());
+
+            }
+            else if (stringLine[lineNum].Contains("#DATA"))
+            {
+                Common.Log("data");
+                mNum = 0;
+            }
+            else if (stringLine[lineNum].Contains("#FIN"))
+            {
+                Common.Log("fin");
+                break;
+            }
+            else if (stringLine[lineNum].Contains("-----"))
+            {
+                mNum++;
+                string noteLine1 = stringLine[lineNum + 1].Trim();
+                string noteLine2 = stringLine[lineNum + 2].Trim();
+                for (int i = 0; i < noteLine1.Length; i++)
+                {
+                    if (noteLine1[i] == '1' || noteLine1[i] == '2')
+                    {
+                        audioData.addLane1(mNum + (float)i / noteLine1.Length);
+                    }
+                }
+                Common.Log("line2 : " + noteLine2);
+                for (int i = 0; i < noteLine2.Length; i++)
+                {
+                    if (noteLine2[i] == '1' || noteLine2[i] == '2')
+                    {
+                        audioData.addLane2(mNum + (float)i / noteLine2.Length);
+                    }
+                }
+
+
+                lineNum++;
+                lineNum++;
+            }
+
+
+            lineNum++;
+        }
+    }
+
+
+}
+
+public class Music
+{
+    public string Name { get; set; }
+    public string FileName { get; set; }
+    public float Bpm { get; set; }
+    public float Preset { get; set; }
+
+    public List<float> laneList1 = new List<float>();
+    public List<float> laneList2 = new List<float>();
+
+    public void addLane1(float time)
+    {
+        float time2 = time * (float)60 * 4 / Bpm;
+        laneList1.Add(time2 - Preset);
+    }
+    public void addLane2(float time)
+    {
+        float time2 = time * (float)60 * 4 / Bpm;
+        laneList2.Add(time2 - Preset);
+    }
+
+    public void getNote1()
+    {
+
     }
 }

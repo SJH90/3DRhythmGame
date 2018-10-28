@@ -1,12 +1,21 @@
 #NAME BrainPower
 #SOUND NOMA-BrainPower.wav
 #BPM 170
-#PRESET 1000
+#PRESET 0.2
 #DATA
 -----
 0
 0
 -----
-11
-0220
+1111
+01010101
+-----
+1111
+01010101
+-----
+1111
+01010101
+-----
+1111
+01010101
 #FIN
