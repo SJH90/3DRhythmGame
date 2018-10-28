@@ -10,17 +10,32 @@ public class TextLoadManager : MonoBehaviour
 
     public string dataPath;
     public Text pathText;
-    public Text text2;
+    public Text logText;
+
+
+    public void printLog(string log)
+    {
+        logText.text += log + "\n";
+    }
 
     IEnumerator Start()
     {
-        dataPath = "file://" + Application.persistentDataPath + "/songs/test.txt";
+
+#if UNITY_EDITOR
+        printLog("Unity Editor");
+        dataPath = Application.dataPath + "/songs/" + "test.txt";
+#elif UNITY_ANDROID
+        printLog("Unity Android");
+        dataPath = Application.persistentDataPath + "/songs/" + "test.txt";
+#endif
         pathText.text = dataPath;
 
-        using (WWW www = new WWW(dataPath))
+        using (WWW www = new WWW("file://" + dataPath))
         {
             yield return www;
+            //pathText.text = www.text;
             ParseText(www.text);
+
         }
     }
 
@@ -45,7 +60,8 @@ public class TextLoadManager : MonoBehaviour
             {
                 string[] splitLine = stringLine[lineNum].Split(' ');
                 Debug.Log("sound : " + splitLine[1]);
-                StartCoroutine(GetComponent<SoundLoadManager>().LoadSound(splitLine[1]));
+                printLog(splitLine[1]);
+                StartCoroutine(GetComponent<SoundLoadManager>().LoadSound(splitLine[1].Trim()));
 
             }
             else if (stringLine[lineNum].Contains("#BPM"))
