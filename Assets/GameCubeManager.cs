@@ -4,8 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour
+public class GameCubeManager : MonoBehaviour
 {
+    public Sprite[] sprites;
+
+
     public GameObject noteObject;
     public AudioSource audioSource;
     public Music audioData;
@@ -63,7 +66,7 @@ public class GameManager : MonoBehaviour
             obj.SetActive(true);
             NoteScript sc = obj.GetComponent<NoteScript>();
             sc.audioSource = audioSource;
-            sc.manager = this;
+            // sc.manager = this;
             sc.time = audioData.laneList1[i];
             sc.line = -1;
         }
@@ -75,7 +78,7 @@ public class GameManager : MonoBehaviour
             obj.SetActive(true);
             NoteScript sc = obj.GetComponent<NoteScript>();
             sc.audioSource = audioSource;
-            sc.manager = this;
+            // sc.manager = this;
             sc.time = audioData.laneList2[i];
             sc.line = 1;
         }
@@ -227,31 +230,4 @@ public class GameManager : MonoBehaviour
     }
 
 
-}
-
-public class Music
-{
-    public string Name { get; set; }
-    public string FileName { get; set; }
-    public float Bpm { get; set; }
-    public float Preset { get; set; }
-
-    public List<float> laneList1 = new List<float>();
-    public List<float> laneList2 = new List<float>();
-
-    public void addLane1(float time)
-    {
-        float time2 = time * (float)60 * 4 / Bpm;
-        laneList1.Add(time2 - Preset);
-    }
-    public void addLane2(float time)
-    {
-        float time2 = time * (float)60 * 4 / Bpm;
-        laneList2.Add(time2 - Preset);
-    }
-
-    public void getNote1()
-    {
-
-    }
 }

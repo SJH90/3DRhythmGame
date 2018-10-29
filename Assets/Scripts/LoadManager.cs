@@ -39,7 +39,7 @@ public class LoadManager : MonoBehaviour
 
 #if UNITY_EDITOR
         Common.Log("Unity Editor");
-        dataPath = "E:" + "/songs/" + fileName;
+        dataPath = "D:" + "/songs/" + fileName;
 #elif UNITY_ANDROID
         Common.Log("Unity Android");
         dataPath = Application.persistentDataPath + "/songs/" + fileName;
@@ -62,5 +62,33 @@ public class LoadManager : MonoBehaviour
         //audioSource.Play();
     }
 
+    public string url;
+    public IEnumerator LoadImage(string fileName)
+    {
+        fileName = Application.dataPath + "marker_copious.png";
+
+#if UNITY_EDITOR
+        Common.Log("Unity Editor");
+        dataPath = Application.dataPath + "/songs/" + fileName;
+#elif UNITY_ANDROID
+        Common.Log("Unity Android");
+        dataPath = Application.persistentDataPath + "/songs/" + fileName;
+#endif
+
+
+        url = Application.dataPath + "marker_copious.png";
+        Debug.Log(url);
+        Texture2D tex;
+        tex = new Texture2D(4, 4, TextureFormat.DXT1, false);
+
+
+        using (WWW www = new WWW(url))
+        {
+            yield return www;
+            www.LoadImageIntoTexture(tex);
+            Sprite tempSprite = Sprite.Create(tex, new Rect(0, 0, tex.width / 5f, tex.height / 5f), new Vector2(.5f, .5f), tex.width / 5f);
+            GetComponent<Renderer>().material.mainTexture = tex;
+        }
+    }
 
 }

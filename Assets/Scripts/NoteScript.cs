@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NoteScript : MonoBehaviour
 {
-    public AudioSource audio;
+    public AudioSource audioSource;
     public GameManager manager;
     public float time;
     public int line;
