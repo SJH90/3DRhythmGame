@@ -58,8 +58,10 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < audioData.laneList1.Count; i++)
         {
+            Vector3 originScale = noteObject.transform.localScale;
             GameObject obj = Instantiate(noteObject);
             obj.transform.parent = laneObj1;
+            obj.transform.localScale = originScale;
             obj.SetActive(true);
             NoteScript sc = obj.GetComponent<NoteScript>();
             sc.audioSource = audioSource;
@@ -70,8 +72,10 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < audioData.laneList2.Count; i++)
         {
+            Vector3 originScale = noteObject.transform.localScale;
             GameObject obj = Instantiate(noteObject);
             obj.transform.parent = laneObj2;
+            obj.transform.localScale = originScale;
             obj.SetActive(true);
             NoteScript sc = obj.GetComponent<NoteScript>();
             sc.audioSource = audioSource;
