@@ -18,7 +18,7 @@ public class NoteScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.localPosition = new Vector3(0, (time - manager.accurTime) * 10, 0);
+        transform.localPosition = new Vector3(0, (time - manager.accurTime) * 10 * MusicData.Speed, 0);
         if (manager.accurTime > time + 0.5f)
         {
             Destroy(gameObject);

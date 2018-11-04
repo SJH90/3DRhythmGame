@@ -25,6 +25,7 @@ public class LoadManager : MonoBehaviour
         using (WWW www = new WWW("file://" + dataPath))
         {
             yield return www;
+            Common.Log("LoadText Complete");
             GetComponent<GameManager>().getText(www.text);
         }
     }
