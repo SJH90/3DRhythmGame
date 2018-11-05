@@ -1,5 +1,5 @@
 #NAME BrainPower
-#SOUND NOMA-BrainPower.wav
+#SOUND NOMA-BrainPower
 #BPM 170
 #PRESET 0.2
 #DATA

@@ -40,10 +40,10 @@ public class LoadManager : MonoBehaviour
 
 #if UNITY_EDITOR
         Common.Log("Unity Editor");
-        dataPath = "D:" + "/songs/" + fileName;
+        dataPath = "D:" + "/songs/" + fileName + ".wav";
 #elif UNITY_ANDROID
         Common.Log("Unity Android");
-        dataPath = Application.persistentDataPath + "/songs/" + fileName;
+        dataPath = Application.persistentDataPath + "/songs/" + fileName + ".mp3";
 #endif
 
         Common.Log(dataPath);

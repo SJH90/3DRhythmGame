@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
 
     public float startTime;
     public float accurTime;
+    public float playTime;
 
     public Text angleText;
     public Text speedText;
@@ -38,7 +39,10 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         MusicData.Speed = 1;
-        MusicData.Preset = 0.3f;
+        MusicData.Preset = -0.40f;
+        speedText.text = "Speed " + String.Format("{0:F1}", MusicData.Speed);
+        presetText.text = String.Format("{0:F2}", MusicData.Preset);
+
         ResetGame();
     }
 
@@ -50,6 +54,27 @@ public class GameManager : MonoBehaviour
     {
         StopAllCoroutines();
         MusicData.Reset();
+
+        foreach (Transform child in laneObj1)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+
+        foreach (Transform child in laneObj2)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+
+        foreach (Transform child in laneObj3)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+
+        foreach (Transform child in laneObj4)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+
         startTime = 0;
     }
 
@@ -164,7 +189,7 @@ public class GameManager : MonoBehaviour
         {
             // SpeedDown();
         }
-        accurTime = ((Time.time - startTime) + audioSource.time) / 2;
+        accurTime = ((Time.time - startTime));// + audioSource.time) / 2;
         //Debug.Log(audioSource.time);
     }
 
@@ -194,13 +219,13 @@ public class GameManager : MonoBehaviour
     }
     public void PresetUp()
     {
-        MusicData.Preset += 0.1f;
-        presetText.text = String.Format("{0:F1}", MusicData.Preset);
+        MusicData.Preset += 0.01f;
+        presetText.text = String.Format("{0:F2}", MusicData.Preset);
     }
     public void PresetDown()
     {
-        MusicData.Preset -= 0.1f;
-        presetText.text = String.Format("{0:F1}", MusicData.Preset);
+        MusicData.Preset -= 0.01f;
+        presetText.text = String.Format("{0:F2}", MusicData.Preset);
     }
     public void Button1()
     {
